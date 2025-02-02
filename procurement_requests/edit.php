@@ -12,11 +12,11 @@
         <table align="center" border="0" class='formbox' id='editbox'>
         <tr >
                 <td>Order Name:</td>
-                <td><input type="text" name="order_name" value="<?php echo isset($_GET['order_name']) ? htmlspecialchars($_GET['order_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" /></td>
+                <td><input type="text" name="order_name" value="<?php echo isset($_GET['order_name']) ? htmlspecialchars($_GET['order_name'], ENT_QUOTES, 'UTF-8') : ''; ?>"  require/></td>
             </tr>
             <tr>
                 <td>Item name:</td>
-                <td><input type="text" name="item_name" value="<?php echo isset($_GET['item_name']) ? htmlspecialchars($_GET['item_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" /></td>
+                <td><input type="text" name="item_name" value="<?php echo isset($_GET['item_name']) ? htmlspecialchars($_GET['item_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" require/></td>
             </tr>
             <tr>
                 <td>Status:</td>
@@ -57,7 +57,7 @@
                     <input type="hidden" name="order_id" value="<?php echo isset($_GET['order_id']) ? htmlspecialchars($_GET['order_id'], ENT_QUOTES, 'UTF-8') : ''; ?>" />
                     <input type="hidden" name="update" value="yes" />
                     <input type="submit" class='submitbutton' name="update_button" value="Update Record" />
-                    <a href="http://localhost/proj1/insertupdatedelete.php">Go back</a>
+                    <a href="insertupdatedelete.php">Go back</a>
                 </td>
             </tr>
         </table>

@@ -3,16 +3,36 @@ $connect=mysqli_connect("localhost","root","","procurement_database");
 
 if (isset($_POST["insert_button"])) {
     if ($_POST["insert"] == "yes") {
-        $order_name = $_POST["order_name"];
-        $item_name = $_POST["item_name"];
-        $status = $_POST["status"];
-        $quantity = $_POST["quantity"];
-        $vendor_name = $_POST["vendor_name"];
-        $department = $_POST["department"];
-        $priority_level = $_POST["priority_level"];
+        $order_name = filter_input(INPUT_POST, "order_name", FILTER_SANITIZE_STRING);
+        $item_name = filter_input(INPUT_POST, "item_name", FILTER_SANITIZE_STRING);
+        $status = filter_input(INPUT_POST, "status", FILTER_SANITIZE_STRING);
+        $quantity = filter_input(INPUT_POST, "quantity", FILTER_SANITIZE_NUMBER_INT);
+        $vendor_name = filter_input(INPUT_POST, "vendor_name", FILTER_SANITIZE_STRING);
+        $department = filter_input(INPUT_POST, "department", FILTER_SANITIZE_STRING);
+        $priority_level = filter_input(INPUT_POST, "priority_level", FILTER_SANITIZE_STRING);
         $current_date = date('Y-m-d H:i:s');
+        $mustContainLetter = "/[a-zA-Z]/";
+        $blacklist = "/(\b(select|union|insert|update|delete|drop|alter|create|truncate|rename|load_file|outfile)\b|--|#|'|\")/i";
         if ($order_name == '' || $item_name=='') {
             echo "<center>Order or item name cannot be empty!</center><br>";
+        }
+        elseif ($quantity === false || $quantity < 0) {
+            echo("<center>Error: Quantity must be a valid non-negative number!</center><br>");
+        }
+        elseif (
+            preg_match($blacklist, $order_name) || 
+            preg_match($blacklist, $item_name) || 
+            preg_match($blacklist, $status) || 
+            preg_match($blacklist, $vendor_name) || 
+            preg_match($blacklist, $department) || 
+            preg_match($blacklist, $priority_level)
+        ) {
+            echo("<center>Error: Invalid input detected!</center><br>");
+        }elseif (
+            !preg_match($mustContainLetter, $order_name) || 
+            !preg_match($mustContainLetter, $item_name) 
+        ) {
+            echo("<center>Error: Order and Item must contain at least one alphabet letter!</center><br>");
         }
         else{
  // Correct the SQL statement with backticks and prepared statement usage
@@ -33,39 +53,84 @@ if (isset($_POST["insert_button"])) {
 }
 
 
-if(isset($_POST["update_button"])){
-	if($_POST["update"]=="yes")
-	{
-		$id=$_POST["order_id"];
-		$order_name=$_POST["order_name"];
-        $item_name=$_POST['item_name'];
-		$status=$_POST["status"];
-        $quantity=$_POST["quantity"];
-        $vendor_name=$_POST['vendor_name'];
-		$department=$_POST["department"];
-		$priority_level=$_POST["priority_level"];
-        $updated_date = date('Y-m-d H:i:s');
-	
+if (isset($_POST["update_button"])) {
+    if ($_POST["update"] == "yes") {
 
-		$query=$connect->prepare("update orders set order_NAME=?, item_name=?, status=?, quantity=?, updated_date=?, vendor_name=?, department=?, priority_level=?  where order_ID=?");
-		$query->bind_param("sssissssi", $order_name, $item_name, $status, $quantity, $updated_date, $vendor_name, $department, $priority_level, $id);//bind the parameters
-		if($query->execute())
-		{
-			echo "<center>Record Updated!</center><br>";
-            echo '<pre>'; print_r($_POST); echo '</pre>';
-		}
-	}
+        // Sanitize & validate input
+        $id = isset($_POST["order_id"]) ? filter_var($_POST["order_id"], FILTER_VALIDATE_INT) : null;
+        $order_name = isset($_POST["order_name"]) ? trim(filter_var($_POST["order_name"], FILTER_SANITIZE_STRING)) : "";
+        $item_name = isset($_POST["item_name"]) ? trim(filter_var($_POST["item_name"], FILTER_SANITIZE_STRING)) : "";
+        $status = isset($_POST["status"]) ? trim(filter_var($_POST["status"], FILTER_SANITIZE_STRING)) : "";
+        $quantity = isset($_POST["quantity"]) ? filter_var($_POST["quantity"], FILTER_VALIDATE_INT) : null;
+        $vendor_name = isset($_POST["vendor_name"]) ? trim(filter_var($_POST["vendor_name"], FILTER_SANITIZE_STRING)) : "";
+        $department = isset($_POST["department"]) ? trim(filter_var($_POST["department"], FILTER_SANITIZE_STRING)) : "";
+        $priority_level = isset($_POST["priority_level"]) ? trim(filter_var($_POST["priority_level"], FILTER_SANITIZE_STRING)) : "";
+        $updated_date = date('Y-m-d H:i:s');
+        $mustContainLetter = "/[a-zA-Z]/";
+        $blacklist = "/(\b(select|union|insert|update|delete|drop|alter|create|truncate|rename|load_file|outfile)\b|--|#|'|\")/i";
+        // Ensure required fields are not empty
+        if (empty($order_name) || empty($item_name) ) {
+            echo "<center>Order or item name cannot be empty!</center><br>";
+        }elseif ($quantity === false || $quantity < 0) {
+            echo("<center>Error: Quantity must be a valid non-negative number!</center><br>");
+        }elseif ($id === null || $quantity === null) {
+            echo "<center>Invalid input data!</center><br>";
+        }elseif (
+            preg_match($blacklist, $order_name) || 
+            preg_match($blacklist, $item_name) || 
+            preg_match($blacklist, $status) || 
+            preg_match($blacklist, $vendor_name) || 
+            preg_match($blacklist, $department) || 
+            preg_match($blacklist, $priority_level)
+        ) {
+            echo ("<center>Error: Invalid input detected!</center><br>");
+        }elseif (
+            !preg_match($mustContainLetter, $order_name) || 
+            !preg_match($mustContainLetter, $item_name) 
+        ) {
+            echo("<center>Error: Order and Item must contain at least one alphabet letter!</center><br>");
+        } else {
+            // Prepare the query
+            $query = $connect->prepare("
+                UPDATE orders 
+                SET order_NAME=?, item_name=?, status=?, quantity=?, updated_date=?, vendor_name=?, department=?, priority_level=?  
+                WHERE order_ID=?
+            ");
+
+            if ($query) {
+                // Bind the parameters
+                $query->bind_param("sssissssi", $order_name, $item_name, $status, $quantity, $updated_date, $vendor_name, $department, $priority_level, $id);
+
+                // Execute and check for errors
+                if ($query->execute()) {
+                    echo "<center>Record Updated Successfully!</center><br>";
+                } else {
+                    echo "<center>Error updating record: " . htmlspecialchars($query->error, ENT_QUOTES, 'UTF-8') . "</center><br>";
+                }
+
+                $query->close();
+            } else {
+                echo "<center>Error preparing statement: " . htmlspecialchars($connect->error, ENT_QUOTES, 'UTF-8') . "</center><br>";
+            }
+        }
+    }
 }
 
 
+
 if(isset($_POST["delete_button"])){
-	$id=$_POST["order_id"];
-	$query=$connect->prepare("delete from orders where order_ID=?");
-	$query->bind_param('i', $id);
-	if($query->execute())
-	{
-		echo "<center>Record Deleted!</center><br>";
-	}
+    $id = isset($_POST["order_id"]) ? filter_var($_POST["order_id"], FILTER_VALIDATE_INT) : null;
+
+    if ($id === null) {
+        echo "<center>Error: Invalid Order ID!</center><br>";
+    } else{
+        $query=$connect->prepare("delete from orders where order_ID=?");
+        $query->bind_param('i', $id);
+        if($query->execute())
+        {
+            echo "<center>Record Deleted!</center><br>";
+        }
+    }
 }
 
 
@@ -192,33 +257,36 @@ echo "</tr>";
 
 while ($query->fetch()) {
     echo "<tr>";
-    echo "<td class='tableinfo'>" . (!empty($order_id) ? $order_id : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($order_name) ? $order_name : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($creator_id) ? $creator_id : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($item_name) ? $item_name : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($status) ? $status : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($quantity) ? $quantity : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($updated_date) ? $updated_date : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($vendor_name) ? $vendor_name : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($department) ? $department : 'empty') . "</td>";
-    echo "<td class='tableinfo'>" . (!empty($priority_level) ? $priority_level : 'empty') . "</td>";
-    
-    echo "<td class='tableinfo'><a href='edit.php?operation=edit&order_id=" . 
-        (!empty($order_id) ? $order_id : 'empty') . "&order_name=" . 
-        (!empty($order_name) ? $order_name : 'empty') . "&creator=" . 
-        (!empty($creator_id) ? $creator_id : 'empty') . "&item_name=" . 
-        (!empty($item_name) ? $item_name : 'empty') . "&status=" . 
-        (!empty($status) ? $status : 'empty') . "&quantity=" . 
-        (!empty($quantity) ? $quantity : 'empty') . "&updated_date=" . 
-        (!empty($updated_date) ? $updated_date : 'empty') . "&vendor_name=" . 
-        (!empty($vendor_name) ? $vendor_name : 'empty') . "&department=" . 
-        (!empty($department) ? $department : 'empty') . "&priority_level=" . 
-        (!empty($priority_level) ? $priority_level : 'empty') . "'>edit</a></td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($order_id) ? $order_id : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($order_name) ? $order_name : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($creator_id) ? $creator_id : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($item_name) ? $item_name : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($status) ? $status : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($quantity) ? $quantity : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($updated_date) ? $updated_date : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($vendor_name) ? $vendor_name : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($department) ? $department : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+    echo "<td class='tableinfo'>" . htmlspecialchars(!empty($priority_level) ? $priority_level : 'empty', ENT_QUOTES, 'UTF-8') . "</td>";
+
+    // Safely encode URL parameters
+    $edit_url = "edit.php?operation=edit" .
+        "&order_id=" . urlencode($order_id) .
+        "&order_name=" . urlencode($order_name) .
+        "&creator=" . urlencode($creator_id) .
+        "&item_name=" . urlencode($item_name) .
+        "&status=" . urlencode($status) .
+        "&quantity=" . urlencode($quantity) .
+        "&updated_date=" . urlencode($updated_date) .
+        "&vendor_name=" . urlencode($vendor_name) .
+        "&department=" . urlencode($department) .
+        "&priority_level=" . urlencode($priority_level);
+
+    echo "<td class='tableinfo'><a href='$edit_url'>edit</a></td>";
 
     echo "<td align='center' class='deletebox'>";
     echo "<form method='post'>";
-    echo "<input type='hidden' name='order_id' value='" . (!empty($order_id) ? $order_id : 'empty') . "' />";
-    echo "<input type='submit' name='delete_button' value='delete' />";
+    echo "<input type='hidden' name='order_id' value='" . htmlspecialchars($order_id, ENT_QUOTES, 'UTF-8') . "' />";
+    echo "<input type='submit' name='delete_button' value='delete' onclick='return confirm(\"Are you sure you want to delete this order?\");' />";
     echo "</form>";
     echo "</td>";    
     echo "</tr>";    
