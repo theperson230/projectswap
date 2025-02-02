@@ -1,0 +1,107 @@
+/* Reset / base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page background and font */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0; /* Remove extra white space around body */
+    padding: 0;
+}
+
+/* Top header bar (FULL-WIDTH with NO White Space) */
+.header {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    width: 100vw; /* Ensure full width */
+    position: relative; /* Remove any unwanted margin effects */
+    top: 0;
+    left: 0;
+}
+
+/* Form container */
+.form-container {
+    max-width: 500px;
+    background: white;
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Labels and inputs */
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+/* Buttons */
+.btn-update {
+    background-color: #c0392b;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn-update:hover {
+    background-color: #a93226;
+}
+
+.btn-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #888;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-cancel:hover {
+    background-color: #666;
+}
+
+/* Success & Error Messages */
+.success-msg, .error-msg {
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.success-msg {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error-msg {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
