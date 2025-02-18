@@ -56,7 +56,12 @@ function canDeleteVendor() {
             <a class="go-btn" href="read_records.php">Go</a>
         </div>
         <?php endif; ?>
-
+        <?php  ?>
+        <div class="card">
+            <h3>View Orders</h3>
+            <a class="go-btn" href="http://localhost/proj1/insertupdatedelete.php?role=admin">Go</a>
+        </div>
+        <?php  ?>
     </div>
 
     <a class="logout-btn" href="login.php">Logout</a>
