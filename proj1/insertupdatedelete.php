@@ -3,9 +3,7 @@ $connect=mysqli_connect("localhost","root","","procurement_database");
 session_start();
 require 'db_connections.php';
 
-#if ($_SESSION['role']== '') {
- #   die($_SESSION['role']);
-#}
+if (!isset($_SESSION['name']) || !isset($_SESSION['role'])) {   die('Not logged in');}
 if (isset($_POST["insert_button"])) {
     if ($_POST["insert"] == "yes") {
         $order_name = filter_input(INPUT_POST, "order_name", FILTER_SANITIZE_STRING);
@@ -153,7 +151,7 @@ if(isset($_POST["delete_button"])){
     <div class='topbox'>
         <h1>Order management</h1>
         <a class='logout' href='http://localhost/swap_project/admin.php'>Back</a>
-        <a class='logout' href='http://localhost/swap_project/login.php'>Log out</a>
+        <a class='logout' href='http://localhost/swap_project/logout.php'>Log out</a>
     </div>
     <form method="post" action="insertupdatedelete.php" >
         <table align="center" border="0" class='formbox' >
