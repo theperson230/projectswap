@@ -1,0 +1,100 @@
+/* Reset / base styles (optional) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+}
+
+/* Red header bar */
+.header {
+    background-color: #c0392b; /* Red bar color */
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+/* White container for the form */
+.form-container {
+    max-width: 600px;
+    margin: 2rem auto; 
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Success/Failure Messages */
+.success-message {
+    color: green;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.error-message {
+    color: red;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Form labels & fields */
+label {
+    display: block;
+    margin: 1rem 0 0.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Button row container */
+.button-row {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center; /* center horizontally */
+    gap: 1rem;              /* space between the two buttons */
+}
+
+/* Submit button styling */
+input[type="submit"] {
+    background-color: #c0392b;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type="submit"]:hover {
+    background-color: #a93226; /* Darker red on hover */
+}
+
+/* Back button styling, similar look to submit */
+.btn-back {
+    display: inline-block;
+    background-color: #c0392b;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn-back:hover {
+    background-color: #a93226; 
+}

@@ -1,0 +1,97 @@
+/* Reset / base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page background and font */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    text-align: center;
+    padding-top: 20px;
+}
+
+/* Top header bar */
+.header {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    width: 100%;
+}
+
+/* Main container */
+.dashboard-container {
+    max-width: 600px;
+    background: white;
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Welcome text */
+.dashboard-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Card grid layout */
+.card-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Individual card */
+.card {
+    background-color: #f8f8f8;
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Card title */
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* “Go” button */
+.go-btn {
+    display: inline-block;
+    background-color: #c0392b;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.go-btn:hover {
+    background-color: #a93226;
+}
+
+/* Logout button */
+.logout-btn {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.logout-btn:hover {
+    background-color: #a93226;
+}
